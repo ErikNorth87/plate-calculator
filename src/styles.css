@@ -98,7 +98,9 @@ h3 { margin-bottom: 12px; }
 }
 
 .intro { padding: 18px 2px 24px; }
-.intro p { color: var(--muted); }
+.intro h2 { color: #f2f2f0; }
+.intro p { color: #b8c0c8; }
+.intro .eyebrow { color: var(--accent); }
 .intro.compact { padding-top: 4px; }
 .home-welcome {
   margin: -22px -18px 24px;
@@ -127,6 +129,31 @@ h3 { margin-bottom: 12px; }
 }
 
 form, .form-card { display: grid; gap: 20px; }
+.form-card {
+  border: 1px solid #000;
+  color: #f2f2f0;
+  background: linear-gradient(180deg, #2a3038 0%, #14181e 55%, #0c0f13 100%);
+  box-shadow:
+    0 1px 0 #ffffff14 inset,
+    0 8px 18px #00000066;
+}
+.form-card input {
+  border: 1px solid #000;
+  color: #f2f2f0;
+  background: linear-gradient(180deg, #333a44 0%, #1a1f26 55%, #10141a 100%);
+  box-shadow: 0 1px 0 #ffffff10 inset;
+}
+.form-card input::placeholder { color: #8a939d; }
+.form-card .segmented button {
+  border: 1px solid #000;
+  color: #f2f2f0;
+  background: linear-gradient(180deg, #333a44 0%, #1a1f26 55%, #10141a 100%);
+  box-shadow: 0 1px 0 #ffffff10 inset;
+}
+.form-card .segmented button.selected {
+  border: 2px solid var(--accent);
+  background: linear-gradient(180deg, #3a3526 0%, #1f1c14 55%, #12100b 100%);
+}
 label { display: grid; gap: 8px; font-weight: 700; }
 input {
   width: 100%;
@@ -422,9 +449,20 @@ legend { margin-bottom: 8px; font-weight: 700; }
 }
 .summary-edit .reps-row input::placeholder { color: #8a939d; }
 
+.settings-section, .share-card {
+  border: 1px solid #000;
+  color: #f2f2f0;
+  background: linear-gradient(180deg, #2a3038 0%, #14181e 55%, #0c0f13 100%);
+  box-shadow:
+    0 1px 0 #ffffff14 inset,
+    0 8px 18px #00000066;
+}
 .settings-section { margin-bottom: 24px; }
 .settings-section h2, .settings-section p { margin-bottom: 3px; }
+.settings-section p { color: #a8b1bb; }
 .share-card { margin-top: 28px; text-align: center; }
+.share-card p { color: #a8b1bb; }
+.share-card .eyebrow { color: var(--accent); }
 .share-qr { display: block; width: min(100%, 300px); margin: 14px auto; border-radius: 12px; }
 code { overflow-wrap: anywhere; }
 
