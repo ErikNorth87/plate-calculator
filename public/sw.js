@@ -1,4 +1,4 @@
-const CACHE = 'plate-calculator-v2'
+const CACHE = 'plate-calculator-v3'
 
 self.addEventListener('install', (event) => {
   self.skipWaiting()
