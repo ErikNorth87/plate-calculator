@@ -1,5 +1,5 @@
 export const PLATES = [45, 35, 25, 15, 10, 5, 2.5] as const
-export const PERCENTAGES = Array.from({ length: 19 }, (_, index) => (index + 1) * 5)
+export const PERCENTAGES = Array.from({ length: 32 }, (_, index) => (index + 1) * 5)
 
 export type BarWeight = 35 | 45
 export type WorkoutMode = 'solo' | 'partnered'
