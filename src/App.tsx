@@ -53,6 +53,20 @@ export default function App() {
           setEditingLift(undefined)
           setScreen('home')
         }}
+        onDelete={
+          editingLift
+            ? () => {
+                const liftId = editingLift.id
+                setData((current) => ({
+                  ...current,
+                  lifts: current.lifts.filter((item) => item.id !== liftId),
+                }))
+                setEditingLift(undefined)
+                setSelectedLiftId((current) => (current === liftId ? null : current))
+                setScreen('home')
+              }
+            : undefined
+        }
       />
     )
   }
