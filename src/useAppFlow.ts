@@ -41,6 +41,7 @@ export function useAppFlow() {
   const [partnerFormDestination, setPartnerFormDestination] =
     useState<'percentage' | 'settings'>('percentage')
   const [mode, setMode] = useState<WorkoutMode>('solo')
+  const [useChangePlates, setUseChangePlates] = useState(false)
   const [sets, setSets] = useState<SetResult[]>([])
   const [pending, setPending] = useState<PendingSet | null>(null)
   const [currentSet, setCurrentSet] = useState<SetResult | null>(null)
@@ -66,11 +67,13 @@ export function useAppFlow() {
     setSets([])
     setCurrentSet(null)
     setActivePartnerId(null)
+    setUseChangePlates(false)
     setScreen('mode')
   }
 
-  const chooseMode = (nextMode: WorkoutMode) => {
+  const chooseMode = (nextMode: WorkoutMode, changePlates: boolean) => {
     setMode(nextMode)
+    setUseChangePlates(changePlates)
     setSets([])
     if (nextMode === 'solo') setActivePartnerId(null)
     setScreen(nextMode === 'solo' ? 'percentage' : 'partner-select')
@@ -129,10 +132,10 @@ export function useAppFlow() {
       partnerTarget: partner ? workingWeight(partner.oneRmsByLiftId[lift.id], pct) : undefined,
     }
     setPending(next)
-    const userOptions = roundedOptions(next.userTarget, data.profile.barWeight)
+    const userOptions = roundedOptions(next.userTarget, data.profile.barWeight, useChangePlates)
     const partnerOptions = next.partnerTarget === undefined
       ? null
-      : roundedOptions(next.partnerTarget, data.profile.barWeight)
+      : roundedOptions(next.partnerTarget, data.profile.barWeight, useChangePlates)
 
     if (userOptions.exact && (!partnerOptions || partnerOptions.exact)) finalizeSet(next, {})
     else setScreen('round')
@@ -141,19 +144,29 @@ export function useAppFlow() {
   const finalizeSet = (next: PendingSet, choices: Record<string, RoundDirection>) => {
     if (!data.profile || !lift) return
     const bar = data.profile.barWeight
-    const userLoaded = selectRoundedWeight(next.userTarget, bar, choices.user ?? 'up')
+    const userLoaded = selectRoundedWeight(next.userTarget, bar, choices.user ?? 'up', useChangePlates)
     const userResult = {
       targetWeight: next.userTarget,
       loadedWeight: userLoaded,
-      plates: solvePlates(userLoaded, bar),
+      plates: solvePlates(userLoaded, bar, useChangePlates),
     }
     let completed: SetResult = { pct: next.pct, user: userResult }
     let load: PartnerLoad | null = null
 
     if (partner && next.partnerTarget !== undefined) {
-      const partnerLoaded = selectRoundedWeight(next.partnerTarget, bar, choices.partner ?? 'up')
+      const partnerLoaded = selectRoundedWeight(
+        next.partnerTarget,
+        bar,
+        choices.partner ?? 'up',
+        useChangePlates,
+      )
       const lowerKey = userLoaded <= partnerLoaded ? 'user' : 'partner'
-      const solved = solvePartnered(Math.min(userLoaded, partnerLoaded), Math.max(userLoaded, partnerLoaded), bar)
+      const solved = solvePartnered(
+        Math.min(userLoaded, partnerLoaded),
+        Math.max(userLoaded, partnerLoaded),
+        bar,
+        useChangePlates,
+      )
       completed = {
         ...completed,
         user: { ...userResult, plates: lowerKey === 'user' ? solved.base : solved.higher },
@@ -179,14 +192,14 @@ export function useAppFlow() {
       key: 'user',
       name: data.profile.name,
       target: pending.userTarget,
-      options: roundedOptions(pending.userTarget, data.profile.barWeight),
+      options: roundedOptions(pending.userTarget, data.profile.barWeight, useChangePlates),
     }]
     if (partner && pending.partnerTarget !== undefined) {
       people.push({
         key: 'partner',
         name: partner.name,
         target: pending.partnerTarget,
-        options: roundedOptions(pending.partnerTarget, data.profile.barWeight),
+        options: roundedOptions(pending.partnerTarget, data.profile.barWeight, useChangePlates),
       })
     }
     return people
@@ -195,7 +208,7 @@ export function useAppFlow() {
   return {
     data, setData, screen, setScreen, selectedLiftId, setSelectedLiftId,
     editingLift, setEditingLift, editingPartner, setEditingPartner,
-    partnerFormDestination, setPartnerFormDestination, mode, sets, setSets,
+    partnerFormDestination, setPartnerFormDestination, mode, useChangePlates, sets, setSets,
     pending, currentSet, partnerLoad, lift, partner, lastPartner,
     openLift, chooseMode, choosePartner, savePartner, deletePartner, choosePercentage,
     finalizeSet, roundPeople,

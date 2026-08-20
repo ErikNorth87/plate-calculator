@@ -274,6 +274,48 @@ legend { margin-bottom: 8px; font-weight: 700; }
 .mode-card small { color: #a8b1bb; }
 .mode-icon { color: var(--accent); font-size: 1.2rem; letter-spacing: .18em; }
 
+.change-plates-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  border: 1px solid #000;
+  border-radius: var(--radius);
+  color: #f2f2f0;
+  background: linear-gradient(180deg, #2a3038 0%, #14181e 55%, #0c0f13 100%);
+  box-shadow:
+    0 1px 0 #ffffff14 inset,
+    0 8px 18px #00000066;
+  text-align: left;
+}
+.change-plates-toggle span:first-child {
+  display: grid;
+  gap: 4px;
+}
+.change-plates-toggle small { color: #a8b1bb; }
+.change-plates-indicator {
+  flex-shrink: 0;
+  min-width: 44px;
+  padding: 8px 12px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  color: #a8b1bb;
+  background: linear-gradient(180deg, #333a44 0%, #1a1f26 55%, #10141a 100%);
+  font-weight: 800;
+  text-align: center;
+}
+.change-plates-toggle.selected {
+  border-color: var(--accent);
+}
+.change-plates-toggle.selected .change-plates-indicator {
+  color: #101820;
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
 .stats-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
 .stats-strip div {
   display: grid;

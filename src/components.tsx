@@ -9,6 +9,9 @@ const PLATE_COLORS: Record<string, string> = {
   '10': '#1a1d21',
   '5': '#8a9199',
   '2.5': '#8a9199',
+  '1': '#c5c9ce',
+  '0.5': '#c5c9ce',
+  '0.25': '#c5c9ce',
 }
 
 const PLATE_SIZES: Record<string, { height: number; width: number }> = {
@@ -19,6 +22,9 @@ const PLATE_SIZES: Record<string, { height: number; width: number }> = {
   '10': { height: 74, width: 20 },
   '5': { height: 58, width: 18 },
   '2.5': { height: 44, width: 16 },
+  '1': { height: 34, width: 14 },
+  '0.5': { height: 28, width: 12 },
+  '0.25': { height: 22, width: 10 },
 }
 
 interface BarbellProps {
@@ -43,6 +49,7 @@ export function BarbellDiagram({
       const isBase = originalIndex < unlabeledCount
       const size = PLATE_SIZES[String(plate)] ?? { height: 60, width: 18 }
       const isYellow = plate === 35 && !isBase
+      const isChangePlate = plate <= 1 && !isBase
       return (
         <div
           className={`plate${isBase ? ' plate-base' : ''}`}
@@ -51,8 +58,9 @@ export function BarbellDiagram({
             background: isBase ? '#c5c9ce' : (PLATE_COLORS[String(plate)] ?? '#8a9199'),
             height: `${size.height}px`,
             width: `${size.width}px`,
-            color: isYellow ? '#101820' : '#fff',
-            textShadow: isYellow ? 'none' : '0 1px 2px #000',
+            color: isYellow || isChangePlate ? '#101820' : '#fff',
+            textShadow: isYellow || isChangePlate ? 'none' : '0 1px 2px #000',
+            fontSize: isChangePlate ? '0.62rem' : undefined,
           }}
           aria-label={`${plate} pound plate${isBase ? ' (base)' : ''}`}
         >

@@ -29,6 +29,16 @@ describe('working weights and rounding', () => {
       upper: 45,
     })
   })
+
+  it('rounds to 0.5 lb steps when change plates are enabled', () => {
+    expect(roundedOptions(252.2, 45, true)).toEqual({
+      exact: false,
+      lower: 252,
+      upper: 252.5,
+    })
+    expect(selectRoundedWeight(252.2, 45, 'down', true)).toBe(252)
+    expect(selectRoundedWeight(252.2, 45, 'up', true)).toBe(252.5)
+  })
 })
 
 describe('plate solving', () => {
@@ -47,5 +57,11 @@ describe('plate solving', () => {
 
   it('uses no add-ons when both rounded targets match', () => {
     expect(solvePartnered(135, 135, 45).addOns).toEqual([])
+  })
+
+  it('loads fractional change plates when enabled', () => {
+    expect(solvePlates(136, 45, true)).toEqual([45, 0.5])
+    expect(solvePlates(135.5, 45, true)).toEqual([45, 0.25])
+    expect(solvePlates(137, 45, true)).toEqual([45, 1])
   })
 })
