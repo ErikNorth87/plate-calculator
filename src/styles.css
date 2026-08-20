@@ -196,6 +196,19 @@ legend { margin-bottom: 8px; font-weight: 700; }
     0 8px 18px #00000066;
 }
 .primary:hover { background: linear-gradient(180deg, #333a44 0%, #1a1f26 55%, #10141a 100%); }
+.danger-button {
+  min-height: 50px;
+  padding: 12px 18px;
+  border: 1px solid #5a1d1d;
+  border-radius: 13px;
+  color: #f2c4c4;
+  background: linear-gradient(180deg, #3a2020 0%, #1e1212 55%, #120c0c 100%);
+  box-shadow:
+    0 1px 0 #ffffff10 inset,
+    0 8px 18px #00000066;
+  font-weight: 800;
+}
+.danger-button:hover { background: linear-gradient(180deg, #4a2828 0%, #261616 55%, #181010 100%); }
 .secondary {
   border: 1px solid #000;
   color: #f2f2f0;

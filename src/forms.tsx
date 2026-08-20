@@ -61,10 +61,12 @@ export function LiftForm({
   initial,
   onSave,
   onCancel,
+  onDelete,
 }: {
   initial?: Lift
   onSave: (name: string, oneRm: number) => void
   onCancel: () => void
+  onDelete?: () => void
 }) {
   const [name, setName] = useState(initial?.name ?? '')
   const [oneRm, setOneRm] = useState(initial?.oneRm.toString() ?? '')
@@ -103,6 +105,19 @@ export function LiftForm({
           <button className="primary" type="submit">
             {initial ? 'Save Changes' : 'Create Lift'}
           </button>
+          {initial && onDelete && (
+            <button
+              className="danger-button full-width"
+              type="button"
+              onClick={() => {
+                if (window.confirm(`Delete ${initial.name}? This removes the lift but keeps workout history.`)) {
+                  onDelete()
+                }
+              }}
+            >
+              Delete Lift
+            </button>
+          )}
         </form>
       </main>
     </>
