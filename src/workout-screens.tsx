@@ -18,9 +18,11 @@ export function ModeScreen({
   onBack,
 }: {
   lift: Lift
-  onSelect: (mode: WorkoutMode) => void
+  onSelect: (mode: WorkoutMode, useChangePlates: boolean) => void
   onBack: () => void
 }) {
+  const [useChangePlates, setUseChangePlates] = useState(false)
+
   return (
     <>
       <Header title={lift.name} onBack={onBack} />
@@ -30,13 +32,27 @@ export function ModeScreen({
           <h2>{lift.oneRm} lb</h2>
           <p>How are you training today?</p>
         </div>
+        <button
+          type="button"
+          className={`change-plates-toggle${useChangePlates ? ' selected' : ''}`}
+          aria-pressed={useChangePlates}
+          onClick={() => setUseChangePlates((current) => !current)}
+        >
+          <span>
+            <strong>Change plates</strong>
+            <small>Include 0.25, 0.5, and 1 lb plates for finer loads</small>
+          </span>
+          <span className="change-plates-indicator" aria-hidden="true">
+            {useChangePlates ? 'On' : 'Off'}
+          </span>
+        </button>
         <div className="mode-grid">
-          <button className="mode-card" onClick={() => onSelect('solo')}>
+          <button className="mode-card" onClick={() => onSelect('solo', useChangePlates)}>
             <span className="mode-icon">●</span>
             <strong>Solo</strong>
             <small>Calculate plates for your sets</small>
           </button>
-          <button className="mode-card" onClick={() => onSelect('partnered')}>
+          <button className="mode-card" onClick={() => onSelect('partnered', useChangePlates)}>
             <span className="mode-icon">● ●</span>
             <strong>Partnered</strong>
             <small>Build efficient shared-bar loads</small>
