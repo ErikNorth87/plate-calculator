@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  isLoadableWeight,
   roundedOptions,
   selectRoundedWeight,
   solvePartnered,
@@ -38,6 +39,20 @@ describe('working weights and rounding', () => {
     })
     expect(selectRoundedWeight(252.2, 45, 'down', true)).toBe(252)
     expect(selectRoundedWeight(252.2, 45, 'up', true)).toBe(252.5)
+  })
+
+  it('skips rounding for change plates when the target is loadable', () => {
+    expect(isLoadableWeight(252, 45, true)).toBe(true)
+    expect(roundedOptions(252, 45, true)).toEqual({
+      exact: true,
+      lower: 252,
+      upper: 252,
+    })
+    expect(roundedOptions(252, 45, false)).toEqual({
+      exact: false,
+      lower: 250,
+      upper: 255,
+    })
   })
 })
 

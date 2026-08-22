@@ -82,6 +82,51 @@ export function totalIncrementLb(useChangePlates: boolean): number {
   return minPlateLb(useChangePlates) * 2
 }
 
+export function isLoadableWeight(
+  totalWeight: number,
+  barWeight: BarWeight,
+  useChangePlates = false,
+): boolean {
+  if (totalWeight < barWeight) return false
+  try {
+    solvePlates(totalWeight, barWeight, useChangePlates)
+    return true
+  } catch {
+    return false
+  }
+}
+
+function nearestLoadableWeight(
+  target: number,
+  barWeight: BarWeight,
+  useChangePlates: boolean,
+  direction: 'down' | 'up',
+): number | null {
+  const step = toTicks(totalIncrementLb(useChangePlates))
+  const targetTicks = toTicks(target)
+  const barTicks = toTicks(barWeight)
+  const delta = targetTicks - barTicks
+
+  if (direction === 'down') {
+    if (delta < 0) return null
+    for (let ticks = barTicks + Math.floor(delta / step) * step; ticks >= barTicks; ticks -= step) {
+      const candidate = fromTicks(ticks)
+      if (isLoadableWeight(candidate, barWeight, useChangePlates)) return candidate
+    }
+    return null
+  }
+
+  for (
+    let ticks = barTicks + Math.ceil(Math.max(0, delta) / step) * step;
+    ticks <= targetTicks + step * 2000;
+    ticks += step
+  ) {
+    const candidate = fromTicks(ticks)
+    if (isLoadableWeight(candidate, barWeight, useChangePlates)) return candidate
+  }
+  return null
+}
+
 export function workingWeight(oneRm: number, percentage: number): number {
   return Math.round(oneRm * percentage) / 100
 }
@@ -91,6 +136,16 @@ export function roundedOptions(
   barWeight: BarWeight,
   useChangePlates = false,
 ): RoundedOptions {
+  if (useChangePlates) {
+    if (isLoadableWeight(target, barWeight, true)) {
+      return { exact: true, lower: target, upper: target }
+    }
+
+    const lower = nearestLoadableWeight(target, barWeight, true, 'down')
+    const upper = nearestLoadableWeight(target, barWeight, true, 'up') ?? barWeight
+    return { exact: false, lower, upper }
+  }
+
   const targetTicks = toTicks(target)
   const barTicks = toTicks(barWeight)
   const step = toTicks(totalIncrementLb(useChangePlates))
